@@ -3,7 +3,7 @@ Date: 09-23-2015 13:13
 Tags: WebApp Security, CSRF, Red Team
 Slug: attacking-json-only-sites-with-csrf
 Author: Caleb
-Summary: An attacker can still perform CSRF attacks against sites that only respond to JSON formatted text.
+Summary: An attacker can still perform CSRF attacks against sites that only respond to JSON formatted text. By manipulating content-type headers, but keeping JSON formatted bodies, a browser will send a JSON-like request without a Preflight request.
 
 The Background
 --------------
