@@ -35,4 +35,4 @@ DEFAULT_PAGINATION = 10
 # Uncomment following line if you want document-relative URLs when developing
 RELATIVE_URLS = True
 
-THEME = "/usr/local/lib/python2.7/dist-packages/pelican-3.6.3-py2.7.egg/pelican/themes/new-bootstrap2/new-bootstrap2"
+THEME = "./new-bootstrap2"
