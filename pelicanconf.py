@@ -5,6 +5,7 @@ from __future__ import unicode_literals
 AUTHOR = u'Caleb'
 SITENAME = u'WattInfoSec'
 SITEURL = 'https://wattinfosec.com'
+STATIC_PATHS = ['images']
 
 PATH = 'content'
 
