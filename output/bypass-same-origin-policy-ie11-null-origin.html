@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <title>WattInfoSec - misc | WattInfoSec</title>
+    <title>Bypass Same Origin Policy on IE11 with a Null Origin | WattInfoSec</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="keywords" content="" />
     <meta name="author" content="Caleb" />
@@ -95,7 +95,8 @@
         <div class="span8" id="content">
 <div class="row">
     <div class="span2">
-        <div class="well small"><footer class="post-info">
+        <div class="well">
+<footer class="post-info">
 <abbr class="published" title="2016-02-21T00:00:00-06:00">
     <i class="icon-calendar"></i>&nbsp;Sun 21 February 2016
 </abbr>
@@ -107,46 +108,49 @@
 	&nbsp;&nbsp;<a href="https://wattinfosec.com/tag/same-origin-policy.html" class="label"><i class="icon-tag"></i>&nbsp;Same Origin Policy</a>
 	&nbsp;&nbsp;<a href="https://wattinfosec.com/tag/bypass.html" class="label"><i class="icon-tag"></i>&nbsp;Bypass</a>
 	&nbsp;&nbsp;<a href="https://wattinfosec.com/tag/ie11.html" class="label"><i class="icon-tag"></i>&nbsp;IE11</a>
-</footer><!-- /.post-info --></div>
+</footer><!-- /.post-info -->        </div>
     </div>
     <div class="span6">
-        <div class="article well">
-            <h1><a href="https://wattinfosec.com/bypass-same-origin-policy-ie11-null-origin.html">Bypass Same Origin Policy on IE11 with a Null Origin</a></h1>
-            <div class="summary"><p>It is possible to bypass the Same Origin policy on IE11 (all tested versions so far.) This can be done by having a site that used the Origin NULL. NULL origins are used by locally loaded HTML.</p>
-                <a class="btn btn-small" href="https://wattinfosec.com/bypass-same-origin-policy-ie11-null-origin.html">more ...</a>
-            </div>
-        </div>
-    </div>
-    <div class="span8">
-        <hr />
-    </div>
-    <div class="span2">
-        <div class="well small"><footer class="post-info">
-<abbr class="published" title="2015-09-23T13:13:00-05:00">
-    <i class="icon-calendar"></i>&nbsp;Wed 23 September 2015
-</abbr>
-<br/><a href="https://wattinfosec.com/author/caleb.html"><i class="icon-user"></i>&nbsp;Caleb</a>
+<section id="content" class="well">
+    <article>
+        <header>
+            <h1>
+                <a href=""
+                        rel="bookmark"
+                        title="Permalink to Bypass Same Origin Policy on IE11 with a Null Origin">
+                        Bypass Same Origin Policy on IE11 with a Null Origin
+                </a>
+            </h1>
+        </header>
+        <div class="entry-content">
 
-
-<br/>
-	&nbsp;&nbsp;<a href="https://wattinfosec.com/tag/webapp-security.html" class="label"><i class="icon-tag"></i>&nbsp;WebApp Security</a>
-	&nbsp;&nbsp;<a href="https://wattinfosec.com/tag/csrf.html" class="label"><i class="icon-tag"></i>&nbsp;CSRF</a>
-	&nbsp;&nbsp;<a href="https://wattinfosec.com/tag/red-team.html" class="label"><i class="icon-tag"></i>&nbsp;Red Team</a>
-</footer><!-- /.post-info --></div>
-    </div>
-    <div class="span6">
-        <div class="article well">
-            <h1><a href="https://wattinfosec.com/attacking-json-only-sites-with-csrf.html">Attacking JSON only sites with CSRF</a></h1>
-            <div class="summary"><p>An attacker can still perform CSRF attacks against sites that only respond to JSON formatted text. By manipulating content-type headers, but keeping JSON formatted bodies, a browser will send a JSON-like request without a Preflight request.</p>
-                <a class="btn btn-small" href="https://wattinfosec.com/attacking-json-only-sites-with-csrf.html">more ...</a>
-            </div>
-        </div>
-    </div>
-    <div class="span8">
-        <hr />
-    </div>
-
-<div class="span6">
+        <h2>The Background</h2>
+<p>Most browsers implement a Same-Origin policy (SOP). This means that resources from one origin can no be shared with a different origin (aka url, or domain). All major browsers do this. Chrome, Firefox, Edge, IE, Safari, etc. They all also have a way to bypass this restriction, a Cross-Origin Resource Sharing request (CORS). Basically, one website sends it's origin (domain) to another, and asks if it has permission to send requests cross-origin. This is done using an OPTIONS request. If the response has adequate headers for that domain, the browser will allow that domain to send near about any request to the other domain. </p>
+<h2>The Fun Part</h2>
+<p>I have found an issue with the above scenario while using IE11 (all versions from at least 11.0.9600.17801 through the current version, 11.0.9600.18059.) If a website has a NULL origin, IE11 does not first send the CORS Preflight OPTIONS request. It will instead just send the Cross Origin request (assuming the user has pressed "allow blocked content")</p>
+<p><img alt="IE11 asks the user to &quot;Allow Blocked Content&quot;" src="/images/bypass-same-origin-policy-ie11-null-origin01-Allow-Blocked-Content.png" /></p>
+<p><img alt="IE11 Sends the DELETE request using Application/JSON without an OPTIONS pre-flight" src="/images/bypass-same-origin-policy-ie11-null-origin01-no-OPTIONS.png" /></p>
+<p>In a given scenario, a website wants to send a request with <code>content-type: application/json.</code></p>
+<p><img alt="A &quot;dangerous&quot; request, it is HTTP method DELETE, and uses a content-type of application/json" src="/images/bypass-same-origin-policy-ie11-null-origin01-Dangerous-Request.png" /></p>
+<p>In Chrome, the first site will first ask permission (as Chrome enforces), by sending an OPTIONS request. The receiving site denies permissions, and Chrome will not send the Cross-Origin request. The same thing happens in IE11, unless the site has a NULL origin. In Chrome, a NULL origin site still has to send a preflight request and obtain permission. In IE, if the Origin is NULL, IE will disregard the CORS policies, and send the full request regardless. </p>
+<p><img alt="Chrome sends the required Pre-Flight OPTIONS request, unlike the IE request shown just below that that sent the DELETE right away." src="/images/bypass-same-origin-policy-ie11-null-origin01-Pre-Flight-Sent.png" /></p>
+<p>According to W3C, <a href="https://www.w3.org/TR/2014/REC-cors-20140116/#resource-preflight-requests" title="CORS">Cross-Origin Resource Sharing recommendation</a>, IF the Origin header is set, the Pre-Flight must be sent for these requests, however when the Origin is null, IE11 does not set the header at all. Per the recommendation: <code>If the Origin header is not present terminate this set of steps. The request is outside the scope of this specification.</code>
+So IE is not outside of the specification, in that the header is not being set (although the Origin is null, no Origin header is set.) That being said, why does IE not set the Origin header if it is NULL? Other browsers do (Read, Chrome), and therefore they fall within the spec.</p>
+<p>Now the question, how do we get a NULL origin? This is not really simple, in fact if an attacker wanted to abuse this flaw, they would have to get you to execute HTML from your local disk. If IE opens a web page from a local file, that "origin" is set to NULL. In this case, any Cross Origin requests would be sent without asking the other site for permission.</p>
+<h2>Thoughts</h2>
+<p>Now this attack vector is pretty small, and basically falls under the "Don't run anything on your machine that you do not trust" adage.
+I have reported this to Microsoft, and given the small attack vector, they do not feel it is an issue. Given that if an attacker can convince you to run something on your system, they will more likely have you run malicious code, rather than HTML to perform an XSS or CSRF attack. </p>
+<p>Although I personally agree the attack vector is very small, if any flaw were found in the future to allow you to set your origin to NULL, this could be abused (if you could set your origin in general, CORS would be bypassed anyway). </p>
+<p>If you know of any way to set your origin to NULL in IE, please let me know. I would love to test this further.</p>
+<h2>Versions Tested</h2>
+<p>Internet Explorer 11 Versions:
+<em>   11.0.9600.17416, 
+</em>   11.0.9600.17801, 
+<em>   11.0.9600.18059, 
+</em>   11.0.10240.16590</p>
+        </div><!-- /.entry-content -->
+    </article>
+</section>
 </div>
 </div>
         </div><!--/span-->
