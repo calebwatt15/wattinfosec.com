@@ -13,15 +13,27 @@ The Fun Part
 ------------
 I have found an issue with the above scenario while using IE11 (all versions from at least 11.0.9600.17801 through the current version, 11.0.9600.18059.) If a website has a NULL origin, IE11 does not first send the CORS Preflight OPTIONS request. It will instead just send the Cross Origin request (assuming the user has pressed "allow blocked content")
 
+<br>
+
 ![IE11 asks the user to "Allow Blocked Content"](/images/bypass-same-origin-policy-ie11-null-origin01-Allow-Blocked-Content.png)
+
+<br>
 
 ![IE11 Sends the DELETE request using Application/JSON without an OPTIONS pre-flight](/images/bypass-same-origin-policy-ie11-null-origin01-no-OPTIONS.png)
 
+<br>
+
 In a given scenario, a website wants to send a request with `content-type: application/json.`
+
+<br>
 
 ![A "dangerous" request, it is HTTP method DELETE, and uses a content-type of application/json](/images/bypass-same-origin-policy-ie11-null-origin01-Dangerous-Request.png)
 
+<br>
+
 In Chrome, the first site will first ask permission (as Chrome enforces), by sending an OPTIONS request. The receiving site denies permissions, and Chrome will not send the Cross-Origin request. The same thing happens in IE11, unless the site has a NULL origin. In Chrome, a NULL origin site still has to send a preflight request and obtain permission. In IE, if the Origin is NULL, IE will disregard the CORS policies, and send the full request regardless. 
+
+<br>
 
 ![Chrome sends the required Pre-Flight OPTIONS request, unlike the IE request shown just below that that sent the DELETE right away.](/images/bypass-same-origin-policy-ie11-null-origin01-Pre-Flight-Sent.png)
 
@@ -42,7 +54,11 @@ Thoughts
 Now this attack vector is pretty small, and basically falls under the "Don't run anything on your machine that you do not trust" adage.
 I have reported this to Microsoft, and given the small attack vector, they do not feel it is an issue. Given that if an attacker can convince you to run something on your system, they will more likely have you run malicious code, rather than HTML to perform an XSS or CSRF attack. 
 
+<br>
+
 ![Microsoft says this is a non-issue](/images/bypass-same-origin-policy-ie11-null-origin01-Non-issue-From-MS.png)
+
+<br>
 
 Although I personally agree the attack vector is very small, if any flaw were found in the future to allow you to set your origin to NULL, this could be abused (if you could set your origin in general, CORS would be bypassed anyway). 
 
