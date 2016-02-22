@@ -7,7 +7,7 @@ Summary: It is possible to bypass the Same Origin policy on IE11 (all tested ver
 
 The Background
 --------------
-Most browsers implement a Same-Origin policy (SOP). This means that resources from one origin can no be shared with a different origin (aka url, or domain). All major browsers do this. Chrome, Firefox, Edge, IE, Safari, etc. They all also have a way to bypass this restriction, a Cross-Origin Resource Sharing request (CORS). Basically, one website sends it's origin (domain) to another, and asks if it has permission to send requests cross-origin. This is done using an OPTIONS request. If the response has adequate headers for that domain, the browser will allow that domain to send near about any request to the other domain. 
+Most browsers implement a Same-Origin policy (SOP). This means that resources from one origin can not be shared with a different origin ([basically, different port number, URL, Domain name, subdomain, etc.](https://www.ietf.org/rfc/rfc6454.txt "Origin")). All major browsers do this. Chrome, Firefox, Edge, IE, Safari, etc. They all also have a way to bypass this restriction, a Cross-Origin Resource Sharing request (CORS). Basically, one website sends it's origin (domain) to another, and asks if it has permission to send requests cross-origin. This is done using an OPTIONS request. If the response has adequate headers for that domain, the browser will allow that domain to send near about any request to the other domain. 
 
 The Fun Part
 ------------
